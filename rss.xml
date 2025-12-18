@@ -1,3 +1,50 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Timmy&apos;s Blog</title><description>Work hard to be lazy.</description><link>https://www.timmyc.fun/</link><language>zh_CN</language><item><title>Hello World</title><link>https://www.timmyc.fun/posts/hello-world/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/hello-world/</guid><description>A simple Hello World.</description><pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Hello World&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Timmy&apos;s Blog</title><description>Work hard to be lazy.</description><link>https://www.timmyc.fun/</link><language>zh_CN</language><item><title>Ssh的一些小知识</title><link>https://www.timmyc.fun/posts/rare-knowledge-of-ssh/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/rare-knowledge-of-ssh/</guid><description>SSH的一些常用命令和用武之地</description><pubDate>Fri, 19 Dec 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;引言&lt;/h2&gt;
+&lt;p&gt;接触Linux的人，对ssh肯定不会陌生，本文会记录一些ssh的命令以及可以用到的地方&lt;/p&gt;
+&lt;h2&gt;开始&lt;/h2&gt;
+&lt;pre&gt;&lt;code&gt;ssh-keygen -t ed25519 -f deploy_key
+#在当前目录生成ed25519算法的公钥和私钥并且以deploy_key命名
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;生成以后在当前目录会出现两个文件，带pub后缀的是公钥
+![[assets/Rare knowledge of ssh.png]]
+除了在ssh上用作鉴权，这对密钥同样可以用在Github仓库中&lt;/p&gt;
+&lt;p&gt;在一个github仓库中添加公钥作为&lt;strong&gt;Deploy Keys&lt;/strong&gt;，就可以在其他配置了对应私钥仓库的actions中对当前配置好的仓库做诸如推送文件等操作&lt;/p&gt;
+&lt;p&gt;需要配置&lt;strong&gt;Deploy Keys&lt;/strong&gt;的仓库可以在仓库的&lt;strong&gt;Settings-&amp;gt;Deploy Keys-&amp;gt;Add deploy key&lt;/strong&gt;操作，完整粘贴.pub文件里面的内容即可&lt;/p&gt;
+&lt;p&gt;:::tip
+文件内容应该以&apos;ssh-rsa&apos;, &apos;ecdsa-sha2-nistp256&apos;, &apos;ecdsa-sha2-nistp384&apos;, &apos;ecdsa-sha2-nistp521&apos;, &apos;ssh-ed25519&apos;等等开头
+:::&lt;/p&gt;
+&lt;p&gt;![[assets/Rare knowledge of ssh-1.png]]&lt;/p&gt;
+&lt;p&gt;之后只需要在对应仓库的Actions Workflow里面添加对应参数的secrets即可
+可以在仓库的&lt;strong&gt;Settings-&amp;gt;Secrets and variables-&amp;gt;Actions&lt;/strong&gt;操作
+![[assets/Rare knowledge of ssh-2.png]]&lt;/p&gt;
+&lt;p&gt;这里一定要确保和你Workflow里面引用的名字是对应的，比如我的是secrets.ACTIONS_DEPLOY_KEY
+![[assets/Rare knowledge of ssh-3.png]]
+之后就可以愉快的使用Github Actions啦&lt;/p&gt;
+&lt;h2&gt;通过代理使用ssh&lt;/h2&gt;
+&lt;p&gt;当我们要测试到某些主机的ssh连接时，总是会有代理的需求，那么应该如何做呢&lt;/p&gt;
+&lt;p&gt;首先，编辑ssh的config文件，通常在&lt;code&gt;~/.ssh/config&lt;/code&gt;或者&lt;code&gt;&quot;C:\Users\Username\.ssh\config&quot;&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;此处以Github举例，加上一行ProxyCommand即可&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Host github.com
+  HostName github.com
+  User git
+  ProxyCommand cmd /c &quot;echo [Using Proxy 10808] Connecting... &amp;gt;&amp;amp;2 &amp;amp;&amp;amp; &quot;C:/Program Files/Git/mingw64/bin/connect.exe&quot; -H 127.0.0.1:10808 %h %p&quot;
+#此处连接的代理是本机10808端口上的http代理
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::tip
+Windows默认没有connect可执行文件，可以通过安装Git for Windows获取或者使用Cygwin之类的进行安装
+:::&lt;/p&gt;
+&lt;h3&gt;连接某主机时指定特定私钥&lt;/h3&gt;
+&lt;p&gt;在我们配置无密码登录ssh时，我们不希望每次都在ssh后面加上参数&lt;code&gt;-i &quot;/path/to/pri_key&quot;&lt;/code&gt;，那怎么办呢？&lt;/p&gt;
+&lt;p&gt;同样的，我们在ssh的config文件下添加一行IdentityFile即可&lt;/p&gt;
+&lt;pre&gt;&lt;code&gt;Host 10.1.0.199
+  HostName 10.1.0.199
+  User ti
+  Port 522
+ 	PreferredAuthentications publickey
+  IdentityFile &quot;C:\SSH_key\mainkey\pri_ssh&quot;
+  ###此处以Windows的路径举例
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;:::tip
+使用前记得提前去主机对应用户的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 中粘贴你要用的密钥的对应公钥 :::&lt;/p&gt;
+</content:encoded></item><item><title>Hello World</title><link>https://www.timmyc.fun/posts/hello-world/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/hello-world/</guid><description>A simple Hello World.</description><pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Hello World&lt;/h2&gt;
 &lt;p&gt;Hi from Fuwari &amp;amp; Astro by Timmy.&lt;/p&gt;
 </content:encoded></item></channel></rss>
