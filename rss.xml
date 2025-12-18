@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Timmy&apos;s Blog</title><description>Work hard to be lazy.</description><link>https://www.timmyc.fun/</link><language>zh_CN</language><item><title>Hello World</title><link>https://www.timmyc.fun/posts/hello-world/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/hello-world/</guid><description>A simple Hello World.</description><pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Hello World&lt;/h2&gt;
+&lt;p&gt;Hi from Fuwari &amp;amp; Astro by Timmy.&lt;/p&gt;
+</content:encoded></item></channel></rss>
