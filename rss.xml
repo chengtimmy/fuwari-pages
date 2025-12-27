@@ -45,6 +45,4 @@ Windows默认没有connect可执行文件，可以通过安装Git for Windows获
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;:::tip
 使用前记得提前去主机对应用户的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 中粘贴你要用的密钥的对应公钥 :::&lt;/p&gt;
-</content:encoded></item><item><title>Hello World</title><link>https://www.timmyc.fun/posts/hello-world/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/hello-world/</guid><description>A simple Hello World.</description><pubDate>Wed, 17 Dec 2025 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;Hello World&lt;/h2&gt;
-&lt;p&gt;Hi from Fuwari &amp;amp; Astro by Timmy.&lt;/p&gt;
 </content:encoded></item></channel></rss>
