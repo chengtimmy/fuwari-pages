@@ -44,5 +44,6 @@ Windows默认没有connect可执行文件，可以通过安装Git for Windows获
   ###此处以Windows的路径举例
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;:::tip
-使用前记得提前去主机对应用户的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 中粘贴你要用的密钥的对应公钥 :::&lt;/p&gt;
+使用前记得提前去主机对应用户的 &lt;code&gt;.ssh/authorized_keys&lt;/code&gt; 中粘贴你要用的密钥的对应公钥
+:::&lt;/p&gt;
 </content:encoded></item></channel></rss>
