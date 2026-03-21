@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Timmy&apos;s Blog</title><description>Work hard to be lazy.</description><link>https://www.timmyc.fun/</link><language>zh_CN</language><item><title>零成本搭建 Vaultwarden：基于 ClawCloud 与 Supabase 的免费部署与自动备份方案</title><link>https://www.timmyc.fun/posts/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA-vaultwarden%E5%9F%BA%E4%BA%8E-clawcloud-%E4%B8%8E-supabase-%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA-vaultwarden%E5%9F%BA%E4%BA%8E-clawcloud-%E4%B8%8E-supabase-%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88/</guid><description>手把手教你利用 ClawCloud 容器和 Supabase 数据库，免费搭建属于你自己的密码管理服务，并实现数据的自动备份</description><pubDate>Sat, 21 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;引言&lt;/h2&gt;
+<?xml version="1.0" encoding="UTF-8"?><rss version="2.0" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Timmy&apos;s Blog</title><description>Work hard to be lazy.</description><link>https://www.timmyc.fun/</link><language>zh_CN</language><item><title>零成本搭建 Vaultwarden：基于 ClawCloud 与 Supabase 的免费部署与自动备份方案</title><link>https://www.timmyc.fun/posts/vw-free/</link><guid isPermaLink="true">https://www.timmyc.fun/posts/vw-free/</guid><description>手把手教你利用 ClawCloud 容器和 Supabase 数据库，免费搭建属于你自己的密码管理服务，并实现数据的自动备份</description><pubDate>Sat, 21 Mar 2026 00:00:00 GMT</pubDate><content:encoded>&lt;h2&gt;引言&lt;/h2&gt;
 &lt;p&gt;随着通行密钥的兴起以及越来越多的软件开始引入 2FA 安全机制，我开始使用密码管理工具。&lt;/p&gt;
 &lt;p&gt;原本使用的是 Microsoft Edge 加 Microsoft Authenticator 的组合，但微软砍刀部发力，Authenticator 的自动填充功能被删除了，Edge 也天天出问题，我没法登录账号，所以换密码管理器已经是板上钉钉的事了。
 一开始看了好多个密码管理器，感觉订阅费都挺贵。虽然 Bitwarden 可以免费使用，但 2FA 相关功能需要付费，所以也很犹豫。不过在网上看到 Bitwarden 能自建，而且有一个轻量化的自建客户端叫 Vaultwarden，配置很低也可以搭建，还可以解锁很多付费功能。
@@ -7,17 +7,17 @@
 :::&lt;/p&gt;
 &lt;h2&gt;挑选厨具&lt;/h2&gt;
 &lt;p&gt;原本打算在家里云里面搭建这个，但全天候开着 VPN 耗电是个问题，而且移动大内网很难拿到公网 IP，内网穿透又不稳定，最后兜兜转转还是选择了免费的容器平台。
-&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88.png&quot; alt=&quot;cloudflared不稳定因素&quot; /&gt;
+&lt;img src=&quot;assets/vw-free.png&quot; alt=&quot;cloudflared不稳定因素&quot; /&gt;
 :::note
 免费的 serverless 平台可以参考 &lt;strong&gt;&lt;a href=&quot;https://2x.nz/posts/serverless-function/&quot;&gt;二叉树树的盘点&lt;/a&gt;&lt;/strong&gt; ，&lt;strong&gt;&lt;a href=&quot;https://gist.github.com/bmaupin/d2d243218863320b01b0c1e1ca0cf5f3&quot;&gt;free-backend-hosting.md&lt;/a&gt;&lt;/strong&gt;
 免费的容器可以参考 &lt;strong&gt;&lt;a href=&quot;https://gist.github.com/bmaupin/0ce79806467804fdbbf8761970511b8c&quot;&gt;free-database-hosting.md&lt;/a&gt;&lt;/strong&gt;
 :::
 本次搭建使用的是 &lt;a href=&quot;https://ap-southeast-1.run.claw.cloud/&quot;&gt;ClawCloud 新加坡区&lt;/a&gt; 和 &lt;a href=&quot;https://supabase.com/dashboard&quot;&gt;Supabase&lt;/a&gt; 新加坡区，没有使用 App Store 自带的镜像文件搭建，这样备份更方便。
-&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88-1.png&quot; alt=&quot;Claw界面1&quot; /&gt;
+&lt;img src=&quot;assets/vw-free-1.png&quot; alt=&quot;Claw界面1&quot; /&gt;
 注册 ClawCloud Run 账号需要使用超过 180 天的 GitHub 账号以获取每月 $5 的赠送余额。注册 Supabase 则没有要求，用自建邮箱也可以过，我使用的是 .fun 结尾的邮箱。&lt;/p&gt;
 &lt;h2&gt;前置工作&lt;/h2&gt;
 &lt;p&gt;首先进入 Supabase，建立数据库。Organization Name 随便填写，英文即可。在新建 project 时根据实际联通情况选择，我选择的是新加坡区。
-&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88-2.png&quot; alt=&quot;Supabase创建页面1&quot; /&gt;
+&lt;img src=&quot;assets/vw-free-2.png&quot; alt=&quot;Supabase创建页面1&quot; /&gt;
 :::note
 记得勾上 Auto RLS，避免访问受限出现问题。
 :::
@@ -25,7 +25,7 @@
 创建好以后，进入 project，选择上方的 connect，修改连接方式为 Session pooler。会得到一个链接，格式如下，将密码替换进 &lt;code&gt;[YOUR-PASSWORD]&lt;/code&gt; 后复制备用。&lt;/p&gt;
 &lt;pre&gt;&lt;code&gt;postgresql://postgres.(project name):[YOUR-PASSWORD]@aws-1-ap-northeast-1.pooler.supabase.com:5432/postgres
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88-3.png&quot; alt=&quot;Supabase创建页面2&quot; /&gt;&lt;/p&gt;
+&lt;p&gt;&lt;img src=&quot;assets/vw-free-3.png&quot; alt=&quot;Supabase创建页面2&quot; /&gt;&lt;/p&gt;
 &lt;blockquote&gt;
 &lt;p&gt;如果使用 Koyeb 这种支持 IPv6 双栈的平台，可以使用 Direct Connection，否则建议 Session pooler。&lt;/p&gt;
 &lt;/blockquote&gt;
@@ -35,7 +35,7 @@
 :::&lt;/p&gt;
 &lt;h2&gt;正式搭建&lt;/h2&gt;
 &lt;p&gt;之后我们进入 ClawCloud Run，点击 App Launchpad，然后点击 Create App。
-&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88-4.png&quot; alt=&quot;Claw创建页面&quot; /&gt;
+&lt;img src=&quot;assets/vw-free-4.png&quot; alt=&quot;Claw创建页面&quot; /&gt;
 镜像名字写 &lt;strong&gt;vaultwarden/server:latest-alpine&lt;/strong&gt;，我们有数据库，所以不需要配置存储，配置直接给最低，80 端口的 Public Access 打开，然后会生成一个域名，之后可以使用这个域名登入 Vaultwarden。
 :::tip
 可以使用自定义域名来访问这个 Vaultwarden 实例，参考 ClawCloud 的文档以获取更多信息。
@@ -48,10 +48,10 @@ PUSH_INSTALLATION_ID=(填入官网获取的 id)
 PUSH_INSTALLATION_KEY=(填入官网获取的 key)
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;之后点击保存，应该会出现如下图的界面。
-&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88-5.png&quot; alt=&quot;Claw环境变量&quot; /&gt;
+&lt;img src=&quot;assets/vw-free-5.png&quot; alt=&quot;Claw环境变量&quot; /&gt;
 点击最上方的 Deploy Application 之后，你的 Vaultwarden 实例就要上线了。
 之后就可以根据个人喜好配置 Vaultwarden 了。
-&lt;img src=&quot;assets/%E9%9B%B6%E6%88%90%E6%9C%AC%E6%90%AD%E5%BB%BA%20Vaultwarden%EF%BC%9A%E5%9F%BA%E4%BA%8E%20ClawCloud%20%E4%B8%8E%20Supabase%20%E7%9A%84%E5%85%8D%E8%B4%B9%E9%83%A8%E7%BD%B2%E4%B8%8E%E8%87%AA%E5%8A%A8%E5%A4%87%E4%BB%BD%E6%96%B9%E6%A1%88-6.png&quot; alt=&quot;VW&quot; /&gt;
+&lt;img src=&quot;assets/vw-free-6.png&quot; alt=&quot;VW&quot; /&gt;
 :::caution
 由于前面的教程没有配置 SMTP 发件服务器，所以没办法使用忘记密码，请务必记得你的主账号的密码，或者使用其他的密码管理器单独记录 Vaultwarden 的主账号密码。
 :::&lt;/p&gt;
